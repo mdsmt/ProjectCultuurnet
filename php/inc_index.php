@@ -36,10 +36,13 @@
 
 			$sql = "select naam from tblusers where email = '$user->Email';";
 			$result  = $db->conn->query($sql);
-			$res = mysql_fetch_array($result);
+			$res = $result->fetch_array();
 			$naam = $res['naam'];
-			//$sql = "select naam from tblusers where email = '$user->Email';";
-			//$voornaam = $db->conn->query($sql);
+			
+			$sql = "select voornaam from tblusers where email = '$user->Email';";
+			$result  = $db->conn->query($sql);
+			$res = $result->fetch_array();
+			$voornaam = $res['voornaam'];
 
 			$user->CanLogin();
 			$_SESSION['useremail'] = $user->Email;

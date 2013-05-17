@@ -7,7 +7,7 @@
 	<input type="password" name="passwordconfirm" placeholder="confirm password" />
 	<input type="submit" name="signup" value="Registreer"  />
 </form>
-<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+<form action="" method="post">
 	<h3>Inloggen</h3>
 	<input type="email" name="email" placeholder="email"  />
 	<input type="password" name="password" placeholder="password"  />

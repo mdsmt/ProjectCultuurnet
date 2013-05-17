@@ -1,6 +1,9 @@
 <?php
+session_start();
+include_once('inc_index.php');
   if(isset($_GET['id'])){
     $id = $_GET['id'];
+
   }
   $url = "http://build.uitdatabank.be/api/event/".$id."?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
   $event = json_decode(file_get_contents($url));
@@ -84,9 +87,9 @@
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
-        include_once('include/formLogin.php');
-        }else{
         include_once('include/formLoggedin.php');
+        }else{
+          include_once('include/formLogin.php');
         }?>
 
         
@@ -217,17 +220,6 @@
     <!-- scripts-->
     <script type="text/javascript" src="../js/plugins/jquery.cycle2.js"></script>
     <script type="text/javascript" src="../js/groundwork.all.js"></script>
-    <!-- google analytics-->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-      
-    </script>
+
   </body>
 </html>
