@@ -1,4 +1,4 @@
-<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+<form action="" method="post">
 	<h3>Registreren</h3>
 	<input type="text" name="name" placeholder="Naam"  />
 	<input type="text" name="surname" placeholder="Voornaam"  />
