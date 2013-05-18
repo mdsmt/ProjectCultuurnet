@@ -17,7 +17,6 @@
 
 			$sql = "select userid from tblusers where email = '$_SESSION[useremail]';";
 			$result  = $db->conn->query($sql);
-			
 			$res = $result->fetch_array();
 			$id = $res['userid'];
 

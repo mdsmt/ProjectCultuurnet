@@ -81,7 +81,28 @@
 			}
 			
 		}
-		
+		public function getGroup()
+		{
+			$db = new Db();
+			$sql = "select userid from tblusers where email = '$_SESSION[useremail]';";
+			$result  = $db->conn->query($sql);
+			$res = $result->fetch_array();
+			$id = $res['userid'];
+
+
+
+			$sql = "select * from tblgroepuser where userid = $id";
+			$result = $db->conn->query($sql);
+			if($result->num_rows == 1)
+			{
+				throw new Exception("Deze persoon zit niet in een groep.");
+			} else {
+				$res = $result->fetch_array();
+				$groepid = $res['groepid'];
+
+				$sql = "select groepnaam from tblgroep where groepid = $groepid";
+			}
+		}
 		
 	}
 ?>

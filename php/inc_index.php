@@ -34,20 +34,26 @@
 			$user->Password = $_POST['password'];
 			$db = new Db();
 
-			$sql = "select naam from tblusers where email = '$user->Email';";
+			$sql = "select naam, userid, voornaam from tblusers where email = '$user->Email';";
 			$result  = $db->conn->query($sql);
 			$res = $result->fetch_array();
 			$naam = $res['naam'];
-			
-			$sql = "select voornaam from tblusers where email = '$user->Email';";
+			$voornaam = $res['voornaam'];
+			$userid = $res['userid'];
+
+			$sql = "select groepid from tblgroepuser where userid = $userid;";
 			$result  = $db->conn->query($sql);
 			$res = $result->fetch_array();
-			$voornaam = $res['voornaam'];
+			$groepid = $res['groepid'];
 
 			$user->CanLogin();
 			$_SESSION['useremail'] = $user->Email;
 			$_SESSION['name'] = $naam;
 			$_SESSION['surname'] = $voornaam;
+			$_SESSION['idgroep'] = $groepid;
+			$_SESSION['userid'] = $userid;
+
+
 		}
 		catch(Exception $e)
 		{

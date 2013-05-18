@@ -2,7 +2,6 @@
   session_start();
   include_once('inc_index.php');
 
-
   $url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
   $events = json_decode(file_get_contents($url));
   $url2 = 'http://build.uitdatabank.be/api/events/report?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json';
@@ -27,8 +26,6 @@
     <link rel="apple-touch-icon" sizes="144x144" href="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileImage" content="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <!-- Modernizr -->
-    <script src="../js/libs/modernizr-2.6.2.min.js"></script>
     <!-- jQuery -->
     <script type="text/javascript" src="../js/libs/jquery-1.8.2.min.js"></script>
     <!-- framework css -->
@@ -53,7 +50,7 @@
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
-        include_once('include/formLoggedin.php');
+          include_once('include/formLoggedin.php');
         }else{
           include_once('include/formLogin.php');
         }?>
@@ -119,19 +116,11 @@
                   echo "<h5><small>". $e->heading ."</small></h5>";
                   echo "<p>" . $e->shortdescription . "</p>";
                 }
-
-
-
                 ?>
           </div>
         </section>
       </article>
     </div>
-    <footer class="footer align-right">
-      <p>&copy 2013 Gary Hepting. Free to use, but <a href="mailto:groundwork@sidereel.com">give me a shout </a>if you find GroundworkCSS extremely useful!</p>
-    </footer>
-    <!-- scripts-->
-    <script type="text/javascript" src="../js/plugins/jquery.cycle2.js"></script>
-    <script type="text/javascript" src="../js/groundwork.all.js"></script>
+    <?php include_once('include/footer.php'); ?>
   </body>
 </html>

@@ -1,6 +1,10 @@
 <?php
 session_start();
+print_r($_SESSION['idgroep']);
 include_once('inc_index.php');
+if(isset($_SESSION['groepid'])){
+    $_SESSION['groepid'] = 1;
+  }
   if(isset($_GET['id'])){
     $id = $_GET['id'];
 
@@ -28,8 +32,6 @@ include_once('inc_index.php');
     <link rel="apple-touch-icon" sizes="144x144" href="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileImage" content="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <!-- Modernizr -->
-    <script src="../js/libs/modernizr-2.6.2.min.js"></script>
     <!-- jQuery -->
     <script type="text/javascript" src="../js/libs/jquery-1.8.2.min.js"></script>
     <!-- framework css -->
@@ -167,7 +169,7 @@ include_once('inc_index.php');
                 echo '€'. $price ;
               }
               else{
-                echo 'free';
+                echo 'Gratis';
               }
             }else{
 
@@ -214,12 +216,7 @@ include_once('inc_index.php');
         </section>
       </article>
     </div>
-    <footer class="footer align-right">
-      <p>&copy 2013 Gary Hepting. Free to use, but <a href="mailto:groundwork@sidereel.com">give me a shout </a>if you find GroundworkCSS extremely useful!</p>
-    </footer>
-    <!-- scripts-->
-    <script type="text/javascript" src="../js/plugins/jquery.cycle2.js"></script>
-    <script type="text/javascript" src="../js/groundwork.all.js"></script>
+       <?php include_once('include/footer.php'); ?>
 
   </body>
 </html>

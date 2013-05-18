@@ -1,6 +1,7 @@
 <?php
 	class Db
 	{
+
 		private $m_sHost = "localhost";
 		private $m_sUser = "root";
 		private $m_sPassword = "";
@@ -16,5 +17,10 @@
 				throw new Exception('Sorry, de verbinding met de database is mislukt.');
 			}
 		}
+		public function getUserid(){
+			
+		}
+
+		
 	}
 ?>

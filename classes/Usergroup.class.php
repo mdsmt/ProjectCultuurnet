@@ -69,8 +69,6 @@
 				$result  = $db->conn->query($sql);
 				$res = $result->fetch_array();
 				$groupleader = $res['groepshoofd'];
-				var_dump($groupleader);
-				var_dump($this->u_sUserid);
 				if($groupleader == $this->u_sUserid){
 					$isaccepted = 1;
 				}
