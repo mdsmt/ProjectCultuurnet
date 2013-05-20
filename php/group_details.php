@@ -28,39 +28,7 @@ include_once('inc_index.php');
     <link type="text/css" rel="stylesheet" href="../css/groundwork-ie.css"><![endif]--><!--[if lt IE 9]>
     <script type="text/javascript" src="../js/libs/html5shiv.min.js"></script><![endif]--><!--[if IE 7]>
     <link type="text/css" rel="stylesheet" href="../css/font-awesome-ie7.min.css"><![endif]-->
-    <script type="text/javascript">
-      // extend Modernizr to have datauri test
-      (function(){
-        var datauri = new Image();
-        datauri.onerror = function() {
-          Modernizr.addTest('datauri', function () { return false; });
-        };
-        datauri.onload = function() {
-          Modernizr.addTest('datauri', function () { return (datauri.width == 1 && datauri.height == 1); });
-          Modernizr.load({
-            test: Modernizr.datauri,
-            nope: '../css/no-datauri.css'
-          });
-        };
-        datauri.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-      })();
-      // fallback if SVG unsupported
-      Modernizr.load({
-        test: Modernizr.inlinesvg,
-        nope: [
-          '../css/no-svg.css'
-        ]
-      });
-      // polyfill for HTML5 placeholders
-      Modernizr.load({
-        test: Modernizr.input.placeholder,
-        nope: [
-          '../css/placeholder_polyfill.css',
-          '../js/libs/placeholder_polyfill.jquery.js'
-        ]
-      });
-      
-    </script>
+
   </head>
   <body>
    <?php include_once('include/nav.php');?>
@@ -124,7 +92,7 @@ include_once('inc_index.php');
         $result  = $db->conn->query($sql);
         $resgroepleider = $result->fetch_array();
         $groepleider = $resgroepleider['groepshoofd'];
-        if($_SESSION['userid'] == $groepleider){
+        if($_SESSION['groepleider'] == 'ja'){
       ?>
       <small><a href='edit_groep.php'>edit</a></small>
       <?php } ?></h2>
@@ -157,13 +125,11 @@ include_once('inc_index.php');
         $url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&cdbid=".$eventen."&format=json";
         $events = json_decode(file_get_contents($url));
         
-        $result  = $db->conn->query($sql);
         foreach ($events as $e) {
               echo "<hr />";
               echo "<img src = '" . $e->thumbnail ."' alt='' class='pull-right gap-right gap-bottom test'/>";
               echo "<h3><a href='details.php?id=". $e->cdbid . "'>".$e->title."</a></h3>";
               echo "<p><small>". $e->calendarsummary . " " .$e->heading ."</small></p>";
-
               echo "<h5><small>". $e->heading ."</small></h5>";
               echo "<p>" . $e->shortdescription . "</p>";
             }

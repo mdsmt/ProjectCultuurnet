@@ -88,8 +88,8 @@
               <label for="omschrijving">Omschrijving: </label><textarea id="omschrijving" type="text" name="omschrijving"  ><?php echo $res['omschrijving']; ?></textarea>
               <input type="submit" name="aanpassenGroep" value="Aanpassen"  />
             </form>
-             <h4>Nieuwe groepsaanvragen</h4>
-            <br />
+             <h4>Nieuwe aanvragen</h4>
+            
             <?php
               $sql = 'select * from tblgroepuser where groepid = '. $_SESSION['idgroep'].' && isaccepted = 0';
               $result  = $db->conn->query($sql);
@@ -120,8 +120,9 @@
             <?php } ?>
 
 
+           <br /> 
+            <div id="leden">
             <h4>Leden</h4>
-            <br />
             <?php
               $sql = 'select * from tblgroepuser where groepid = '. $_SESSION['idgroep'].' && isaccepted = 1';
               $result  = $db->conn->query($sql);
@@ -147,7 +148,78 @@
                   }
                 } 
                ?>
+            </div>
 
+            <div id="eventen">
+             <br /> <h4>Evenementen</h4>
+            <?php
+              $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep] && isaccepted = 1;";
+              $result  = $db->conn->query($sql);
+              $eventen = "";
+              
+              if($result->num_rows == 0)
+              {
+              ?>
+             <div>Nog geen evenementen in deze groep.</div>
+              <?php
+             } else {
+                 while($row = $result->fetch_array())
+              {
+               
+                 $eventid = $row['eventid'];
+                
+                  $eventen = $eventen . $eventid . ";";
+                  
+
+              } 
+                 $url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&cdbid=".$eventen."&format=json";
+                 $events = json_decode(file_get_contents($url));
+                 foreach ($events as $e) {              
+                  ?>
+                  <div  id = "id<?php echo  $e->cdbid ?>"><?php echo  $e->title  ?>
+                    <a href="#" class='delEvent' data-id='<?php echo  $e->cdbid ?>'>Verwijder</a>           
+                  </div>
+            <?php
+            //  <a href='details.php?id=". $e->cdbid . "'>
+             
+            }
+              } ?>  
+
+
+
+              <br/><h4>Nieuwe evenement aanvragen</h4>
+              <div id"accEvent">
+              <?php
+              $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep] && isaccepted = 0;";
+              $result  = $db->conn->query($sql);
+              
+              if($result->num_rows == 0){
+                echo "<div>Er zijn geen nieuwe aanvragen</div>";
+              }else{
+                while($row = $result->fetch_array())
+                {
+                  $eventid = $row['eventid'];
+                
+                  $eventen = $eventen . $eventid . ";";
+                  
+
+              } 
+                 $url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&cdbid=".$eventen."&format=json";
+                 $events = json_decode(file_get_contents($url));
+                foreach ($events as $e) {              
+                  ?>
+                  <div id = "id<?php echo $e->cdbid ?>"><input type = "checkbox"
+                         class = "chkEventaanvraag"
+                         value = "<?php echo $e->cdbid ?>"
+                         "chkid<?php echo $e->cdbid ?>" />            
+                         <?php echo $e->title  ?>
+                        </div>
+
+                 <?php }
+                } ?>
+        <?php  ?>
+             </div>
+            </div>
           </div>
         </section>
       </article>

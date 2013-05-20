@@ -52,7 +52,12 @@
 			$_SESSION['surname'] = $voornaam;
 			$_SESSION['idgroep'] = $groepid;
 			$_SESSION['userid'] = $userid;
-
+			if($groepleider = $userid){
+				$_SESSION['groepleider'] = 'ja';
+			}
+			else{
+				$_SESSION['groepleider'] = 'nee';
+			}
 
 		}
 		catch(Exception $e)

@@ -115,6 +115,14 @@
                   echo "<h3><a href='details.php?id=". $e->cdbid . "'>".$e->title."</a></h3>";
                   echo "<h5><small>". $e->heading ."</small></h5>";
                   echo "<p>" . $e->shortdescription . "</p>";
+                  if ((isset($_SESSION['idgroep'])) && ($_SESSION['loggedin'] == 'true')){
+                    echo '<p class="warning" id="id'.$e->cdbid.'"><a href="#"  class="small warning button voegToe " data-eventid=' . $e->cdbid . ' >Voeg toe</a></p>';
+
+                  }
+
+                  else{
+                    echo 'mislukt';
+                  }
                 }
                 ?>
           </div>
