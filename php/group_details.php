@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once('inc_index.php');
+$evenementid = $_GET['id'];
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
@@ -50,8 +51,6 @@ include_once('inc_index.php');
         }else{
           include_once('include/formLogin.php');
         }?>
-
-        
           <hr>
           <h3>Popular events</h3>
           <div class="row">
@@ -64,31 +63,35 @@ include_once('inc_index.php');
             <div class="one mobile half padded"><img src="http://placehold.it/120x85/198d98/ffffff/" alt=""></div>
           </div>
         </aside>
-
         <section class="three fourths padded">
          <?php
-         if(!isset($_SESSION['idgroep'])){
-
-            echo "<p>Je bent niet ingelogd.</p>";
-  
-         }else{
+         if(!isset($_SESSION['loggedin'])){
+            echo "<p>Je moet ingelogd zijn om de informatie van de groepen te kunnen zien.</p>";
+          }else{
           include_once('../classes/Db.class.php');
-          $db = new Db();
-          $sql = "select userid from tblgroepuser where groepid = $_SESSION[idgroep];";
+          $sql = "select userid from tblgroepuser where groepid = $evenementid && isAccepted = 1;";
           $result  = $db->conn->query($sql);
           $res = $result->fetch_array();
           $userid = $res['userid'];
 
           if($result->num_rows == 0){
-            echo "<p>Je bent niet gemachtigd voor deze groep</p>";
+            $sql = "select * from tblgroepuser where groepid = $evenementid && isAccepted = 0 && userid=$_SESSION[userid];";
+            var_dump($sql);
+            $result2  = $db->conn->query($sql);
+            if($result2->num_rows == 0){
+            echo "<p id='lidworden'>Je bent nog geen lid van deze groep <a class='success button small lidworden' data-userid = ".$_SESSION['userid']." data-groepid='".$evenementid. "'>Wordt lid!</a></p>";
+            }else{
+              echo "<p id='lidworden'>De groepshoofd moet je lidmaatschap nog bevestigen.</p>";
+            }
           }else{
-          $db = new Db();
-          $sql = "select * from tblgroep where groepid = $_SESSION[idgroep];";
+         
+
+          $sql = "select * from tblgroep where groepid = $evenementid;";
           $result  = $db->conn->query($sql);
           $res = $result->fetch_array();     
 ?>    <h2><?php echo $res['groepnaam'] . " ";?>
       <?php
-        $sql = "select groepshoofd from tblgroep where groepid = $_SESSION[idgroep];";
+        $sql = "select groepshoofd from tblgroep where groepid = $evenementid;";
         $result  = $db->conn->query($sql);
         $resgroepleider = $result->fetch_array();
         $groepleider = $resgroepleider['groepshoofd'];
@@ -105,7 +108,7 @@ include_once('inc_index.php');
         <?php
           $db = new Db();
 
-          $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep];";
+          $sql = "select * from tblgroepevent where groepid = $evenementid && isAccepted = 1;";
           $result  = $db->conn->query($sql);
           $eventen = "";
           
@@ -130,6 +133,18 @@ include_once('inc_index.php');
               echo "<img src = '" . $e->thumbnail ."' alt='' class='pull-right gap-right gap-bottom test'/>";
               echo "<h3><a href='details.php?id=". $e->cdbid . "'>".$e->title."</a></h3>";
               echo "<p><small>". $e->calendarsummary . " " .$e->heading ."</small></p>";
+              $sql = 'select isAanwezig from tblgroepuserevent where userid='. $_SESSION['userid'] . '&& groepid = ' . $evenementid . '&& eventid="'.$e->cdbid.'"';
+              $result = $db->conn->query($sql);
+              $res = $result->fetch_array();
+              $isAanwezig = $res['isAanwezig'];
+              if($isAanwezig == 1){
+                echo "<p id='aanwezig". $e->cdbid ."' class='success'>Aanwezig <a class='small error button afwezig' data-eventid='". $e->cdbid . "'><small>afwezig</small></a></p>";
+              }elseif($isAanwezig == 0){
+                echo "<p id='aanwezig". $e->cdbid ."' class='error'> Afwezig <a class='small success button aanwezig' data-eventid='". $e->cdbid . "'><small>Aanwezig</small></a>";
+              }
+             
+
+
               echo "<h5><small>". $e->heading ."</small></h5>";
               echo "<p>" . $e->shortdescription . "</p>";
             }

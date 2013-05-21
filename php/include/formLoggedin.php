@@ -36,6 +36,6 @@
 </select>
 <ul>
 	<li><a href="addgroup.php">Groep toevoegen</a></li>
-	<li><a href="group_details.php">Huidige groep</a></li>
+	<li><a href='group_details.php?id=<?php echo $_SESSION['idgroep'];?>'>Huidige groep</a></li>
 	<li><a href="logout.php">Uitloggen</a></li>
 </ul>

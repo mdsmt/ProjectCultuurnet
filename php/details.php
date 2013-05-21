@@ -160,28 +160,53 @@ if(isset($_SESSION['groepid'])){
                 echo $event->event->eventdetails->eventdetail->calendarsummary;
               }
             ?></p>
-          <p><big>Prijs?</big> 
+           <?php
+            ?>
+
             <?php 
             if(count($event->event->eventdetails->eventdetail) > 1){
-              
-              if(isset($event->event->eventdetails->eventdetail->price->pricevalue)){
-                $price = $event->event->eventdetails->eventdetail->price->pricevalue ;
-                echo '€'. $price ;
-              }
-              else{
-                echo 'Gratis';
-              }
-            }else{
+              if(!isset($event->event->eventdetails->eventdetail[0]->price)){ 
+                echo '<p><big>Geen prijsdetails beschikbaar</big></p>';
+              }else{
+                ?>          <p><big>Prijs?</big> 
+<?php
+                if(isset($event->event->eventdetails->eventdetail[0]->price->pricevalue)){
+                  $price = $event->event->eventdetails->eventdetail[0]->price->pricevalue ;
+                  echo '€'. $price ;
+                }
+                else{
+                  echo 'Gratis';
+                }?>
+                 <p><big>Prijs beschrijving</big>
+                <?php
+                 $price = $event->event->eventdetails->eventdetail[0]->price->pricedescription ;
+                  echo  $price ;
 
-              if(isset($event->event->eventdetails->eventdetail->price->pricevalue)){
-                $price = $event->event->eventdetails->eventdetail->price->pricevalue;
-                echo '€'. $price;
-              }
+              ?> </p><?php }}
               else{
-                echo 'Gratis';
-              }
-                
-              } ?></p>
+                if(!isset($event->event->eventdetails->eventdetail->price)){ 
+                echo '<p><big>Geen prijsdetails beschikbaar</big></p>';
+              }else{
+                ?>
+                 <p><big>Prijs?</big> 
+
+                <?php
+
+                if(isset($event->event->eventdetails->eventdetail->price->pricevalue)){
+                  $price = $event->event->eventdetails->eventdetail->price->pricevalue;
+                  echo '€'. $price;
+                }
+                else{
+                  echo 'Gratis';
+                }
+                  
+                ?>
+               
+                 <?php             
+                  $price = $event->event->eventdetails->eventdetail->price->pricedescription;
+                  echo $price;
+                }}             
+                 ?></p>
           <h2>Beschrijving</h2>
           <p><?php 
              if(count($event->event->eventdetails->eventdetail) > 1){
@@ -190,12 +215,12 @@ if(isset($_SESSION['groepid'])){
               else{
                 echo $event->event->eventdetails->eventdetail->shortdescription;;
               }
-            ?></p>
+            ?></p><br />
           <p><?php 
 
               if(count($event->event->eventdetails->eventdetail) > 1){
                 if(isset($event->event->eventdetails->eventdetail[0]->longdescription)){
-                  echo $event->event->eventdetails->eventdetail->price->pricevalue;
+                  echo $event->event->eventdetails->eventdetail[0]->longdescription;
                 }
                 else{
                   echo "Geen longdescription mogelijk";

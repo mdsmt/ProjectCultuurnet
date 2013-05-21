@@ -116,8 +116,14 @@
                   echo "<h5><small>". $e->heading ."</small></h5>";
                   echo "<p>" . $e->shortdescription . "</p>";
                   if ((isset($_SESSION['idgroep'])) && ($_SESSION['loggedin'] == 'true')){
+                    $db = new Db();
+                    $sql = 'Select * from tblgroepevent where eventid="' . $e->cdbid . '" && groepid =' .$_SESSION['idgroep'];
+                    $result  = $db->conn->query($sql);
+                    if($result->num_rows != 0){
+                      echo '<p class="warning">Dit event is al toegevoegd aan de groep</p>';
+                    }else{
                     echo '<p class="warning" id="id'.$e->cdbid.'"><a href="#"  class="small warning button voegToe " data-eventid=' . $e->cdbid . ' >Voeg toe</a></p>';
-
+                  }
                   }
 
                   else{

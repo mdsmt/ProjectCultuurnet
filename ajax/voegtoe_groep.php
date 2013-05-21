@@ -10,7 +10,6 @@
 			$sql = 'update tblgroepuser SET isaccepted ="1" where userid = "'. $userid . '" && groepid = "'.$_SESSION['idgroep']. '"';
 			$result = $db->conn->query($sql);
 			$feedbackUserAccept = "succes";
-
 			}
 			catch(Exception $e)
 			{

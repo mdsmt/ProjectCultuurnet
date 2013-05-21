@@ -88,6 +88,8 @@
               <label for="omschrijving">Omschrijving: </label><textarea id="omschrijving" type="text" name="omschrijving"  ><?php echo $res['omschrijving']; ?></textarea>
               <input type="submit" name="aanpassenGroep" value="Aanpassen"  />
             </form>
+
+            <div id"aanvragen">
              <h4>Nieuwe aanvragen</h4>
             
             <?php
@@ -110,7 +112,7 @@
                       <div id = "id<?php echo $row['userid'] ?>"><input type = "checkbox"
                          class = "chkGroepsaanvraag"
                          value = "<?php echo $row['userid'] ?>"
-                         "chkid<?php echo $row['userid'] ?>" />            
+                         "chkid<?php echo $row['userid'] ?>" data-naam="<?php echo $naam ?> "data-voornaam="<?php echo $voornaam ?>" />            
                          <?php echo $voornaam . ' ' .   $naam  ?>
                         </div>
                   <?php 
@@ -119,7 +121,7 @@
                 } ?>
             <?php } ?>
 
-
+            </div>
            <br /> 
             <div id="leden">
             <h4>Leden</h4>
@@ -185,14 +187,17 @@
             }
               } ?>  
 
+            </div>
 
 
-              <br/><h4>Nieuwe evenement aanvragen</h4>
+              <br/>
               <div id"accEvent">
+                <h4>Nieuwe evenement aanvragen</h4>
+              
               <?php
               $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep] && isaccepted = 0;";
               $result  = $db->conn->query($sql);
-              
+              $eventen ='';
               if($result->num_rows == 0){
                 echo "<div>Er zijn geen nieuwe aanvragen</div>";
               }else{
@@ -211,7 +216,7 @@
                   <div id = "id<?php echo $e->cdbid ?>"><input type = "checkbox"
                          class = "chkEventaanvraag"
                          value = "<?php echo $e->cdbid ?>"
-                         "chkid<?php echo $e->cdbid ?>" />            
+                         "chkid<?php echo $e->cdbid ?>" data-titel="<?php echo $e->title ?>" />            
                          <?php echo $e->title  ?>
                         </div>
 
