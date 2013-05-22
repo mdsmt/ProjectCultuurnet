@@ -76,13 +76,11 @@ $('.voegToe').on('click',function(e) {
 	  dataType: "json"
 	});
 	request.done(function(msg) {
-		alert("gelukt");
 		if(msg == 'succes'){
 			$('#' + eId).html('Dit event is toegevoegd.');
 			console.log(msg);
 		}		
 		if(msg == 'failed'){
-			alert("gelukt");
 			$('#' + eId).html('Dit event is al toegevoegd aan de groep.');
 			console.log(msg);
 		}		
@@ -212,6 +210,26 @@ $('.lidworden').on('click',function(e) {
 			$('#lidworden').html('Je hebt je aangemeld om lid te worden.');
 			console.log(msg);
 		}		
+	});
+	e.preventDefault();
+});
+
+$('.nietAccept').on('click',function(e) {
+	var userid = $(this).attr("data-id");
+	//Ajax call
+	var request = $.ajax({
+	  url: "../ajax/nietaccept.php",
+	  type: "POST",
+	  data: {userid : userid},
+	  dataType: "json"
+	});
+	request.done(function(msg) {
+		if(msg == 'succes'){
+			var eId = 'id' + userid;
+			$('#' + eId).html('De persoon is niet geaccepteerd.');
+			console.log(msg);
+		}		
+		
 	});
 	e.preventDefault();
 });

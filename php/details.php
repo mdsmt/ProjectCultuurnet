@@ -1,16 +1,14 @@
 <?php
 session_start();
-print_r($_SESSION['idgroep']);
 include_once('inc_index.php');
-if(isset($_SESSION['groepid'])){
-    $_SESSION['groepid'] = 1;
-  }
+// ID van de groep verkrijgen.
+// Connecteren met API
   if(isset($_GET['id'])){
     $id = $_GET['id'];
-
+    $url = "http://build.uitdatabank.be/api/event/".$id."?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
+    $event = json_decode(file_get_contents($url));
   }
-  $url = "http://build.uitdatabank.be/api/event/".$id."?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
-  $event = json_decode(file_get_contents($url));
+ 
  
 ?>
 <!DOCTYPE html>
@@ -39,39 +37,6 @@ if(isset($_SESSION['groepid'])){
     <link type="text/css" rel="stylesheet" href="../css/groundwork-ie.css"><![endif]--><!--[if lt IE 9]>
     <script type="text/javascript" src="../js/libs/html5shiv.min.js"></script><![endif]--><!--[if IE 7]>
     <link type="text/css" rel="stylesheet" href="../css/font-awesome-ie7.min.css"><![endif]-->
-    <script type="text/javascript">
-      // extend Modernizr to have datauri test
-      (function(){
-        var datauri = new Image();
-        datauri.onerror = function() {
-          Modernizr.addTest('datauri', function () { return false; });
-        };
-        datauri.onload = function() {
-          Modernizr.addTest('datauri', function () { return (datauri.width == 1 && datauri.height == 1); });
-          Modernizr.load({
-            test: Modernizr.datauri,
-            nope: '../css/no-datauri.css'
-          });
-        };
-        datauri.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-      })();
-      // fallback if SVG unsupported
-      Modernizr.load({
-        test: Modernizr.inlinesvg,
-        nope: [
-          '../css/no-svg.css'
-        ]
-      });
-      // polyfill for HTML5 placeholders
-      Modernizr.load({
-        test: Modernizr.input.placeholder,
-        nope: [
-          '../css/placeholder_polyfill.css',
-          '../js/libs/placeholder_polyfill.jquery.js'
-        ]
-      });
-      
-    </script>
   </head>
   <body>
    <?php include_once('include/nav.php');?>
@@ -80,12 +45,7 @@ if(isset($_SESSION['groepid'])){
       </div>
       <article class="row">
         <aside class="one fifth padded border-right">
-          <?php
-      if(isset($feedbackSignUpIn))
-      {
-        echo $feedbackSignUpIn;
-      }
-    ?>
+         
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
@@ -111,7 +71,7 @@ if(isset($_SESSION['groepid'])){
         <section class="three fourths padded">
           <h1>
           <?php 
-         /* echo $event->event->eventdetails->eventdetail->title;*/
+          // Titel
           if(count($event->event->eventdetails->eventdetail) > 1){
             echo $event->event->eventdetails->eventdetail[0]->title;
           }
@@ -120,6 +80,7 @@ if(isset($_SESSION['groepid'])){
           }
           ?></h1>
           <?php
+          // foto van het event
           if(count($event->event->eventdetails->eventdetail) > 1){
             $images = $event->event->eventdetails->eventdetail[0]->media->file;
           }
@@ -139,20 +100,7 @@ if(isset($_SESSION['groepid'])){
           ?>    
           <p><big>Wanneer?</big>
           <?php
-              /*if($event->event->calendar->timestamps){
-                echo $event->event->calendar->timestamps->timestamp->date . ' om ';
-                echo $event->event->calendar->timestamps->timestamp->timestart;
-              }
-              else{
-                $period = $event->event->calendar->periods->period;
-                echo 'van ' . $period->datefrom . ' tot ' . $period->dateto;
-                foreach ($period->weekscheme as $p) {
-                  if($p->friday && $p->friday->opentype == "open"){
-                    echo "<br />Vrijdag van " . $period->weekscheme->friday->openingtime->from . " tot "
-                    . $period->weekscheme->friday->openingtime->to;
-                  }
-                }
-              }*/
+            // Wanneer is het te doen
               if(count($event->event->eventdetails->eventdetail) > 1){
                 echo $event->event->eventdetails->eventdetail[0]->calendarsummary;
               }
@@ -163,13 +111,14 @@ if(isset($_SESSION['groepid'])){
            <?php
             ?>
 
-            <?php 
+            <?php // Prijs van het evenement
             if(count($event->event->eventdetails->eventdetail) > 1){
               if(!isset($event->event->eventdetails->eventdetail[0]->price)){ 
                 echo '<p><big>Geen prijsdetails beschikbaar</big></p>';
               }else{
-                ?>          <p><big>Prijs?</big> 
-<?php
+                ?>
+                <p><big>Prijs?</big> 
+                <?php 
                 if(isset($event->event->eventdetails->eventdetail[0]->price->pricevalue)){
                   $price = $event->event->eventdetails->eventdetail[0]->price->pricevalue ;
                   echo '€'. $price ;
@@ -208,7 +157,7 @@ if(isset($_SESSION['groepid'])){
                 }}             
                  ?></p>
           <h2>Beschrijving</h2>
-          <p><?php 
+          <p><?php  // Beschrijvijving van het evenement
              if(count($event->event->eventdetails->eventdetail) > 1){
                 echo $event->event->eventdetails->eventdetail[0]->shortdescription;
               }
@@ -242,6 +191,3 @@ if(isset($_SESSION['groepid'])){
       </article>
     </div>
        <?php include_once('include/footer.php'); ?>
-
-  </body>
-</html>

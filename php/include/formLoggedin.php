@@ -11,12 +11,17 @@
 	$res = $result->fetch_array();
 	$id = $res['userid'];
 	
-	$sql = "select tblgroep.groepnaam, tblgroep.groepid from tblgroepuser inner join tblgroep on tblgroep.groepid = tblgroepuser.groepid where tblgroepuser.userid = '$id'";
+	$sql = "select tblgroep.groepnaam, tblgroep.groepid from tblgroepuser inner join tblgroep on tblgroep.groepid = tblgroepuser.groepid where tblgroepuser.userid = '$id' && isAccepted = 1";
 	$result = $db->conn->query($sql);
 	if($result->num_rows == 0)
 	{
 	?>
 		<div>U zit nog niet in een groep.</div>
+		</select>
+		<ul>
+			<li><a href="addgroup.php">Groep toevoegen</a></li>
+			<li><a href="logout.php">Uitloggen</a></li>
+		</ul>
 	<?php
 	} else {
 	?>
@@ -32,10 +37,10 @@
 	}
 ?>
 	</select>
+	<ul>
+			<li><a href="addgroup.php">Groep toevoegen</a></li>
+			<li><a href='group_detail.php?id=<?php echo $_SESSION['idgroep'];?>'>Huidige groep</a></li>
+			<li><a href="logout.php">Uitloggen</a></li>
+		</ul>
 <?php } ?>
-</select>
-<ul>
-	<li><a href="addgroup.php">Groep toevoegen</a></li>
-	<li><a href='group_details.php?id=<?php echo $_SESSION['idgroep'];?>'>Huidige groep</a></li>
-	<li><a href="logout.php">Uitloggen</a></li>
-</ul>
+

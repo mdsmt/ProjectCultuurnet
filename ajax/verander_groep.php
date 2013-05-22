@@ -20,6 +20,8 @@
 			$_SESSION['idgroep'] = $id;
 
 		}
+				header('location: index.php');
+
 		header('Content-type: application/json');
 
 ?>

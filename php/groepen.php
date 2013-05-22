@@ -37,12 +37,7 @@ include_once('inc_index.php');
       </div>
       <article class="row">
         <aside class="one fifth padded border-right">
-          <?php
-      if(isset($feedbackSignUpIn))
-      {
-        echo $feedbackSignUpIn;
-      }
-    ?>
+       
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
@@ -96,5 +91,3 @@ include_once('inc_index.php');
     </div>
        <?php include_once('include/footer.php'); ?>
 
-  </body>
-</html>

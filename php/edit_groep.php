@@ -2,7 +2,9 @@
   session_start();
   include_once('inc_index.php');
   include_once('inc_edit_groep.php');
-
+  if(isset($_GET['id'])){
+    $groepid = $_GET['id'];
+}
 
 ?>
 <!DOCTYPE html>
@@ -39,12 +41,7 @@
       </div>
       <article class="row">
         <aside class="one fifth padded border-right">
-          <?php
-      if(isset($feedbackSignUpIn))
-      {
-        echo $feedbackSignUpIn;
-      }
-    ?>
+          
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
@@ -67,19 +64,21 @@
         <section class="three fourths padded">
               <h2>Groep aanpassen</h2>
              <?php  
+              //Connectie met de DB
               $db = new Db();
-              $sql = "select groepshoofd from tblgroep where groepid = $_SESSION[idgroep];";
+              $sql = "select groepshoofd from tblgroep where groepid = $groepid;";
               $result  = $db->conn->query($sql);
               $resgroepleider = $result->fetch_array();
               $groepleider = $resgroepleider['groepshoofd'];
+              
               if($_SESSION['userid'] != $groepleider){
                 echo "Je hebt niet de rechten om de groep aan te passen";
               }else{
-              $sql = "select * from tblgroep where groepid = $_SESSION[idgroep];";
+              $sql = "select * from tblgroep where groepid =$groepid;";
               $result  = $db->conn->query($sql);
               $res = $result->fetch_array();
             ?>
-            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method='post'>
+            <form action="edit_groep.php?id=<?php echo $groepid; ?>" method='post'>
              <?php if(isset($feedbackAanpassenGroep))
               {
                 echo $feedbackAanpassenGroep;
@@ -113,7 +112,7 @@
                          class = "chkGroepsaanvraag"
                          value = "<?php echo $row['userid'] ?>"
                          "chkid<?php echo $row['userid'] ?>" data-naam="<?php echo $naam ?> "data-voornaam="<?php echo $voornaam ?>" />            
-                         <?php echo $voornaam . ' ' .   $naam  ?>
+                         <?php echo $voornaam . ' ' .   $naam  ?><a href='#' class='nietAccept' data-id="<?php echo $row['userid'] ?>"> Niet accepteren</a>
                         </div>
                   <?php 
                     }  
@@ -155,7 +154,7 @@
             <div id="eventen">
              <br /> <h4>Evenementen</h4>
             <?php
-              $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep] && isaccepted = 1;";
+              $sql = "select * from tblgroepevent where groepid = $groepid && isaccepted = 1;";
               $result  = $db->conn->query($sql);
               $eventen = "";
               
@@ -195,7 +194,7 @@
                 <h4>Nieuwe evenement aanvragen</h4>
               
               <?php
-              $sql = "select * from tblgroepevent where groepid = $_SESSION[idgroep] && isaccepted = 0;";
+              $sql = "select * from tblgroepevent where groepid =".$groepid." && isaccepted = 0;";
               $result  = $db->conn->query($sql);
               $eventen ='';
               if($result->num_rows == 0){
@@ -230,5 +229,3 @@
       </article>
     </div>
     <?php include_once('include/footer.php'); ?>
-  </body>
-</html>

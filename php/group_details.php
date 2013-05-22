@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once('inc_index.php');
-$evenementid = $_GET['id'];
+$groepid = $_GET['id'];
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
@@ -38,12 +38,7 @@ $evenementid = $_GET['id'];
       </div>
       <article class="row">
         <aside class="one fifth padded border-right">
-          <?php
-      if(isset($feedbackSignUpIn))
-      {
-        echo $feedbackSignUpIn;
-      }
-    ?>
+    
         <?php 
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
@@ -69,46 +64,71 @@ $evenementid = $_GET['id'];
             echo "<p>Je moet ingelogd zijn om de informatie van de groepen te kunnen zien.</p>";
           }else{
           include_once('../classes/Db.class.php');
-          $sql = "select userid from tblgroepuser where groepid = $evenementid && isAccepted = 1;";
+          $sql = "select * from tblgroepuser where groepid = $groepid && isAccepted = 1 && userid=$_SESSION[userid]";
           $result  = $db->conn->query($sql);
           $res = $result->fetch_array();
-          $userid = $res['userid'];
-
           if($result->num_rows == 0){
-            $sql = "select * from tblgroepuser where groepid = $evenementid && isAccepted = 0 && userid=$_SESSION[userid];";
-            var_dump($sql);
+            $sql = "select * from tblgroepuser where groepid = $groepid && isAccepted = 0 && userid=$_SESSION[userid];";
             $result2  = $db->conn->query($sql);
             if($result2->num_rows == 0){
-            echo "<p id='lidworden'>Je bent nog geen lid van deze groep <a class='success button small lidworden' data-userid = ".$_SESSION['userid']." data-groepid='".$evenementid. "'>Wordt lid!</a></p>";
+            echo "<p id='lidworden'>Je bent nog geen lid van deze groep <a class='success button small lidworden' data-userid = ".$_SESSION['userid']." data-groepid='".$groepid. "'>Wordt lid!</a></p>";
             }else{
               echo "<p id='lidworden'>De groepshoofd moet je lidmaatschap nog bevestigen.</p>";
             }
           }else{
          
 
-          $sql = "select * from tblgroep where groepid = $evenementid;";
+          $sql = "select * from tblgroep where groepid = $groepid;";
           $result  = $db->conn->query($sql);
           $res = $result->fetch_array();     
 ?>    <h2><?php echo $res['groepnaam'] . " ";?>
       <?php
-        $sql = "select groepshoofd from tblgroep where groepid = $evenementid;";
+        $sql = "select groepshoofd from tblgroep where groepid = $groepid;";
         $result  = $db->conn->query($sql);
         $resgroepleider = $result->fetch_array();
         $groepleider = $resgroepleider['groepshoofd'];
         if($_SESSION['groepleider'] == 'ja'){
       ?>
-      <small><a href='edit_groep.php'>edit</a></small>
+      <small><a href='edit_groep.php?id=<?php echo $groepid; ?>'>edit</a></small>
       <?php } ?></h2>
       <p><?php echo $res['omschrijving'];?></p>
 
 
       <hr>
-
+      <h2>
+      Leden
+      </h2>
+      <?php
+              $sql = 'select * from tblgroepuser where groepid = '. $_SESSION['idgroep'].' && isaccepted = 1';
+              $result  = $db->conn->query($sql);
+              
+              if($result->num_rows == 0){
+                echo "<div>Er zijn geen leden</div>";
+              }else{
+                while($row = $result->fetch_array())
+                {
+                  $sql = 'select * from tblusers where userid = '. $row['userid'];
+                  $resultuser  = $db->conn->query($sql);
+                  //$res = $result->fetch_array();
+                  while($row = $resultuser->fetch_array())
+                  {
+                      $naam = $row['naam'];
+                      $voornaam = $row['voornaam'];
+                        ?>
+                      <div  id = "id<?php echo $row['userid'] ?>">
+                        <?php echo $voornaam . ' ' .   $naam;  ?>
+                      </div>
+                  <?php 
+                    }  
+                  }
+                } 
+               ?>
+<hr>
       <h2>Evenementen</h2>
         <?php
           $db = new Db();
 
-          $sql = "select * from tblgroepevent where groepid = $evenementid && isAccepted = 1;";
+          $sql = "select * from tblgroepevent where groepid = $groepid && isAccepted = 1;";
           $result  = $db->conn->query($sql);
           $eventen = "";
           
@@ -133,22 +153,29 @@ $evenementid = $_GET['id'];
               echo "<img src = '" . $e->thumbnail ."' alt='' class='pull-right gap-right gap-bottom test'/>";
               echo "<h3><a href='details.php?id=". $e->cdbid . "'>".$e->title."</a></h3>";
               echo "<p><small>". $e->calendarsummary . " " .$e->heading ."</small></p>";
-              $sql = 'select isAanwezig from tblgroepuserevent where userid='. $_SESSION['userid'] . '&& groepid = ' . $evenementid . '&& eventid="'.$e->cdbid.'"';
+              $sql = 'select isAanwezig from tblgroepuserevent where userid='. $_SESSION['userid'] . '&& groepid = ' . $groepid . '&& eventid="'.$e->cdbid.'"';
               $result = $db->conn->query($sql);
               $res = $result->fetch_array();
               $isAanwezig = $res['isAanwezig'];
-              if($isAanwezig == 1){
-                echo "<p id='aanwezig". $e->cdbid ."' class='success'>Aanwezig <a class='small error button afwezig' data-eventid='". $e->cdbid . "'><small>afwezig</small></a></p>";
-              }elseif($isAanwezig == 0){
-                echo "<p id='aanwezig". $e->cdbid ."' class='error'> Afwezig <a class='small success button aanwezig' data-eventid='". $e->cdbid . "'><small>Aanwezig</small></a>";
+              if($result->num_rows == 0){
+                echo "<p id='aanwezig". $e->cdbid ."'><a class='small success button aanwezig' data-eventid='". $e->cdbid . "'><small>Aanwezig</small></a>
+                                                      <a class='small error button afwezig' data-eventid='". $e->cdbid . "'><small>Afwezig</small></a>
+                                                      </p>";
+                 echo "<h5><small>". $e->heading ."</small></h5>";
+                 echo "<p>" . $e->shortdescription . "</p>";
               }
+              else{
+                if($isAanwezig == 1){
+                  echo "<p id='aanwezig". $e->cdbid ."' class='success'>Aanwezig <a class='small error button afwezig' data-eventid='". $e->cdbid . "'><small>Afwezig</small></a></p>";
+                }elseif($isAanwezig == 0){
+                  echo "<p id='aanwezig". $e->cdbid ."' class='error'><a class='small success button aanwezig' data-eventid='". $e->cdbid . "'><small>Aanwezig</small></a> Afwezig </p>";
+                }
              
 
 
-              echo "<h5><small>". $e->heading ."</small></h5>";
-              echo "<p>" . $e->shortdescription . "</p>";
+             
             }
-        }
+        }}
 
 
         ?>
@@ -161,10 +188,8 @@ $evenementid = $_GET['id'];
         </section>
       </article>
     </div>
-       <?php include_once('include/footer.php'); ?>
+         <?php include_once('include/footer.php'); ?>
 
-  </body>
-</html>
 <?php
 }
 

@@ -5,3 +5,7 @@
     <script type="text/javascript" src="../js/plugins/jquery.cycle2.js"></script>
     <script type="text/javascript" src="../js/groundwork.all.js"></script>
     <script type="text/javascript" src="../js/app.js"></script>
+    <!-- <script type="text/javascript" src="../js/hide.js"></script>-->
+    
+  </body>
+</html>

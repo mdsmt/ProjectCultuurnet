@@ -1,9 +1,6 @@
 <?php
 	include_once('../classes/Db.class.php');
 	include_once('../classes/User.class.php');
-	
-	
-	
 	if(isset($_POST['signup']))
 	{
 		try
@@ -18,13 +15,13 @@
 			$_SESSION['useremail'] = $user->Email;
 			$_SESSION['name'] = $user->Name;
 			$_SESSION['surname'] = $user->Surname;
+			
 		}
 		catch(Exception $e)
 		{
 			$feedbackSignUpIn = $e->getMessage();
 		}
 	}
-	
 	if(isset($_POST['signin']))
 	{
 		try
@@ -64,6 +61,44 @@
 		{
 			$feedbackSignUpIn = $e->getMessage();
 		}
+	}
+	if(isset($_POST['filter']))
+	{
+		try
+		{
+			$urllink = 'http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json';
+			$categorie = $_POST["category"];
+			$provincie = $_POST['provincie'];
+			$gratis = $_POST['gratis'];
+
+			if($categorie != 'all'){
+				$urllink .= '&heading=' . $categorie;
+
+			}
+
+			if($provincie != 'overal'){
+				$urllink .= '&regio=' . $provincie;
+			}
+
+			if($gratis != 'beide'){
+				switch ($gratis) {
+					case 'ja':
+						$urllink .= '&isfree=true';
+						break;
+					
+					case 'nee':
+						$urllink .= '&isfree=false';
+						break;
+				}
+			}
+				
+		}
+		catch(Exception $e)
+		{
+			$feedbackSignUpIn = $e->getMessage();
+		}
+	}else{
+		$urllink = 'http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json';
 	}
 	
 ?>

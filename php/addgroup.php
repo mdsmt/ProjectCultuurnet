@@ -21,7 +21,6 @@ include_once('inc_addgroup.php')
     <link rel="apple-touch-icon" sizes="144x144" href="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileImage" content="../images/apple-icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <!-- Modernizr -->
     <script src="../js/libs/modernizr-2.6.2.min.js"></script>
     <!-- jQuery -->
     <script type="text/javascript" src="../js/libs/jquery-1.8.2.min.js"></script>
@@ -39,13 +38,10 @@ include_once('inc_addgroup.php')
       </div>
       <article class="row">
         <aside class="one fifth padded border-right">
-          <?php
-      if(isset($feedbackSignUpIn))
-      {
-        echo $feedbackSignUpIn;
-      }
+          
     ?>
         <?php 
+        // Login scherm of logged in scherm
         if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true')
         {
         include_once('include/formLoggedin.php');
@@ -53,18 +49,6 @@ include_once('inc_addgroup.php')
           include_once('include/formLogin.php');
         }?>
 
-        
-          <hr>
-          <h3>Popular events</h3>
-          <div class="row">
-            <div class="one mobile half padded"><img src="http://placehold.it/120x85/198d98/ffffff/" alt=""></div>
-            <div class="one mobile half padded"><img src="http://placehold.it/120x85/198d98/ffffff/" alt=""></div>
-          </div>
-           <h3>Suggested events</h3>
-          <div class="row">
-            <div class="one mobile half padded"><img src="http://placehold.it/120x85/198d98/ffffff/" alt=""></div>
-            <div class="one mobile half padded"><img src="http://placehold.it/120x85/198d98/ffffff/" alt=""></div>
-          </div>
         </aside>
 		<?php
       if(isset($feedbackAddGroup))
@@ -83,12 +67,4 @@ include_once('inc_addgroup.php')
         </section>
       </article>
     </div>
-    <footer class="footer align-right">
-      <p>&copy 2013 Gary Hepting. Free to use, but <a href="mailto:groundwork@sidereel.com">give me a shout </a>if you find GroundworkCSS extremely useful!</p>
-    </footer>
-    <!-- scripts-->
-    <script type="text/javascript" src="../js/plugins/jquery.cycle2.js"></script>
-    <script type="text/javascript" src="../js/groundwork.all.js"></script>
- 
-  </body>
-</html>
+         <?php include_once('include/footer.php'); ?>
